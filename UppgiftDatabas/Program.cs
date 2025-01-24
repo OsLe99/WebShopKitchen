@@ -4,7 +4,9 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ShopAdd.NewCategory();
+            ShopAdd.NewDeliverer();
+            ShopAdd.NewProduct();
         }
     }
 }

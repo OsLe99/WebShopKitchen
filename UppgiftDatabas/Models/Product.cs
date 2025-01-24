@@ -14,7 +14,7 @@ namespace UppgiftDatabas.Models
         public string Color { get; set; }
         public string Description { get; set; }
         public int Amount { get; set; }
-        public int DeliveryId { get; set; }
+        public int DelivererId { get; set; }
         public int CategoryId { get; set; }
         public bool Chosen { get; set; }
 

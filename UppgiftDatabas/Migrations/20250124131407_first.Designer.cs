@@ -11,7 +11,7 @@ using UppgiftDatabas.Models;
 namespace UppgiftDatabas.Migrations
 {
     [DbContext(typeof(myDbContext))]
-    [Migration("20250124120127_first")]
+    [Migration("20250124131407_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -183,9 +183,6 @@ namespace UppgiftDatabas.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DelivererId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")

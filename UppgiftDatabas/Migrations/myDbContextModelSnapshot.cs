@@ -182,9 +182,6 @@ namespace UppgiftDatabas.Migrations
                     b.Property<int>("DelivererId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeliveryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

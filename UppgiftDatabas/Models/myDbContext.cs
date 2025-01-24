@@ -19,7 +19,7 @@ namespace UppgiftDatabas.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=WebshopKitchen;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=KitchenStore;Trusted_Connection=True;TrustServerCertificate=True");
         }
     }
 }
