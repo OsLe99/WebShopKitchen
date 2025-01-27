@@ -4,9 +4,10 @@
     {
         static void Main(string[] args)
         {
-            ShopAdd.NewCategory();
-            ShopAdd.NewDeliverer();
-            ShopAdd.NewProduct();
+            while (true)
+            {
+                ShopAlter.ChangeProduct();
+            }
         }
     }
 }
