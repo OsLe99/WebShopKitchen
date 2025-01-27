@@ -4,9 +4,13 @@
     {
         static void Main(string[] args)
         {
-            while (true)
+            bool runProgram = true;
+            while (runProgram == true)
             {
-
+                ShopAlter.ChangeProduct();
+                ShopAlter.ChangeProduct();
+                Menu.MainMenu();
+                Console.ReadKey();
             }
         }
     }
