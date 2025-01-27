@@ -17,6 +17,7 @@ namespace UppgiftDatabas.Models
         public int Phone { get; set; }
         public string Email { get; set; }
         public int Age { get; set; }
+        public bool IsAdmin { get; set; }
 
         public virtual ICollection<Order> Order { get; set; }
     }

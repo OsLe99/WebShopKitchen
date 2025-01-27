@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UppgiftDatabas.Models;
 
 namespace UppgiftDatabas
 {
-    public class ShopAdd
+    internal class ShopAdd
     {
         public static void NewProduct()
         {

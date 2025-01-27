@@ -1,43 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UppgiftDatabas.Models;
 
 namespace UppgiftDatabas
 {
     internal class ShopAlter
     {
-        public static void RemoveProduct()
-        {
-            using (var db = new myDbContext())
-            {
-                Console.WriteLine("\t+++ Remove Product +++");
-                var productList = db.Product;
-                foreach (var product in productList)
-                {
-                    Console.WriteLine($"ID: {product.Id} Name: {product.Name}");
-                }
-
-                int removeId = Helpers.GetIntInput("\nProduct ID to remove: ");
-                try
-                {
-                    var productToRemove = db.Product.Single(x => x.Id == removeId);
-                    db.Remove(productToRemove);
-                    db.SaveChanges();
-                    Console.WriteLine("Product removed successfully.");
-                }
-                catch (InvalidOperationException)
-                {
-                    Console.WriteLine("Error: Product ID not found.");
-                }
-            }
-        }
-
         public static void ChangeProduct()
         {
             using (var db = new myDbContext())
             {
                 Console.Clear();
                 var productList = db.Product;
+                // Display and select product
                 foreach (var product in productList)
                 {
                     Console.WriteLine($"ID: {product.Id}\t Name: {product.Name}\t Color: {product.Color}\t Category: {product.CategoryId}\t Price: {product.Price}:-\t Deliverer: {product.DelivererId}" +
@@ -59,6 +37,7 @@ namespace UppgiftDatabas
                 Console.WriteLine("Press 0 to exit.");
 
                 int adminChoice = Helpers.GetIntInput("Select what to change: ");
+                bool menuLoop = true;
                 switch (adminChoice)
                 {
                     case 0:
@@ -75,11 +54,24 @@ namespace UppgiftDatabas
                         break;
 
                     case 3:
-                        foreach (var category in db.Category)
+                        while (menuLoop == true)
                         {
-                            Console.WriteLine($"ID: {category.Id}\t Name: {category.Name}");
+                            foreach (var category in db.Category)
+                            {
+                                Console.WriteLine($"ID: {category.Id}\t Name: {category.Name}");
+                            }
+                            alterProduct.CategoryId = Helpers.GetIntInput("New category ID: ");
+                            if (db.Category.Where(x => x.Id == alterProduct.CategoryId).Select(x => x.Id).SingleOrDefault() == alterProduct.CategoryId)
+                            {
+                                menuLoop = false;
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid input. Please enter a valid ID. Press any button to continue...");
+                                Console.ReadKey();
+                            } 
                         }
-                        alterProduct.CategoryId = Helpers.GetIntInput("New category ID: ");
                         break;
 
                     case 4:
@@ -87,11 +79,24 @@ namespace UppgiftDatabas
                         break;
 
                     case 5:
-                        foreach (var deliverer in db.Deliverer)
+                        while (menuLoop == true)
                         {
-                            Console.WriteLine($"ID: {deliverer.Id}\t Name: {deliverer.Name}");
+                            foreach (var deliverer in db.Deliverer)
+                            {
+                                Console.WriteLine($"ID: {deliverer.Id}\t Name: {deliverer.Name}");
+                            }
+                            alterProduct.DelivererId = Helpers.GetIntInput("New deliverer ID: ");
+                            if (db.Deliverer.Where(y => y.Id == alterProduct.DelivererId).Select(y => y.Id).SingleOrDefault() == alterProduct.DelivererId)
+                            {
+                                menuLoop = false;
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid input. Please enter a valid ID. Press any button to continue...");
+                                Console.ReadKey();
+                            } 
                         }
-                        alterProduct.DelivererId = Helpers.GetIntInput("New deliverer ID: ");
                         break;
 
                     case 6:
@@ -108,7 +113,8 @@ namespace UppgiftDatabas
                 }
 
                 db.SaveChanges();
-                Console.WriteLine("Product updated successfully.");
+                Console.WriteLine("Product updated successfully. Press any button to continue...");
+                Console.ReadKey();
             }
         }
     }
