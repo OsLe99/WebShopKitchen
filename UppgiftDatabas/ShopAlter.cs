@@ -56,6 +56,7 @@ namespace UppgiftDatabas
                     case 3:
                         while (menuLoop == true)
                         {
+                            // Display all categories
                             foreach (var category in db.Category)
                             {
                                 Console.WriteLine($"ID: {category.Id}\t Name: {category.Name}");
@@ -81,6 +82,7 @@ namespace UppgiftDatabas
                     case 5:
                         while (menuLoop == true)
                         {
+                            // Display all deliverers
                             foreach (var deliverer in db.Deliverer)
                             {
                                 Console.WriteLine($"ID: {deliverer.Id}\t Name: {deliverer.Name}");
@@ -122,6 +124,7 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                // Display all deliverers
                 var delivererList = db.Deliverer;
                 foreach (var deliverer in delivererList)
                 {
@@ -146,6 +149,7 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                // Display all categories
                 var categoryList = db.Category;
                 foreach (var category in categoryList)
                 {
@@ -160,6 +164,7 @@ namespace UppgiftDatabas
                 }
                 Console.Write("New name: ");
                 alterCategory.Name = Console.ReadLine();
+
                 db.SaveChanges();
                 Console.WriteLine("Category updated successfully. Press any button to continue...");
                 Console.ReadKey();

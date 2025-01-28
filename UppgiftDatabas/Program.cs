@@ -7,14 +7,23 @@
             bool runProgram = true;
             while (runProgram == true)
             {
-                Console.Clear();
                 Menu.MainMenu();
                 ConsoleKeyInfo input = Console.ReadKey();
                 switch (input.KeyChar)
                 {
                     case '1':
-                        Console.Write("1");
+                        Menu.Category1();
                         Console.ReadLine();
+                        break;
+                    case '2':
+                        Menu.Category2();
+                        Console.ReadLine();
+                        break;
+                    case '3':
+                        Menu.Category3();
+                        Console.ReadLine();
+                        break;
+                    case 'a':
                         break;
                 }
             }

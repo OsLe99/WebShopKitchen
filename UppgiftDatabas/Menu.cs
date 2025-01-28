@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -14,11 +17,15 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                // Welcome window
+                Console.Clear();
                 List<string> welcomeText = new List<string>
                 {
-                    "Welcome to Kitchen Store!"
+                    "Welcome to Cyber Kitchen!"
                 };
                 var welcomeWindow = new Window("", 0, 0, welcomeText);
+
+
                
                 // Display category window
                 var categoryList = db.Category.Select(x => $"ID: {x.Id} | {x.Name}").ToList();
@@ -29,7 +36,7 @@ namespace UppgiftDatabas
                 List<string> chosen3List = new List<string>();
 
                 var categories = new List<int> { 1, 2, 3 };
-
+                // Add chosen products into lists based on Id
                 foreach (var categoryId in categories)
                 {
                     var chosenList = db.Product.Where(x => x.Chosen == true && x.CategoryId == categoryId)
@@ -56,20 +63,97 @@ namespace UppgiftDatabas
                 var chosen1Window = new Window("Cookware Discounts", 30, 0, chosen1List);
                 var chosen2Window = new Window("Utensils Discounts", 30, (chosen1List.Count + 2), chosen2List);
                 var chosen3Window = new Window("Small Appliances Discounts", 30, (chosen1List.Count + chosen2List.Count + 4), chosen3List);
+
+                // User guide
+                List<string> guide = new List<string>
+                {
+                    "'A' for admin",
+                    "'S' for search",
+                    "'C' for checkout",
+                    "'T' to change customer",
+                    "'Y' to add customer",
+                    "'Q to quit"
+                };
+                var guideWindow = new Window("Guide", 0, categoryList.Count + welcomeText.Count + 4, guide);
+
                 welcomeWindow.Draw();
-                categoryWindow.Draw();
+                guideWindow.Draw();
                 chosen1Window.Draw(); 
                 chosen2Window.Draw();
                 chosen3Window.Draw();
+                categoryWindow.Draw();
             }
         }
 
-        //public static void Category1()
-        //{
-        //    using (var db = new myDbContext())
-        //    {
-        //        foreach ()
-        //    }
-        //}
+        public static void DisplayCategoryProducts(int categoryId)
+        {
+            using (var db = new myDbContext())
+            {
+                Console.Clear();
+                var categoryName = db.Category
+                    .Where(c => c.Id == categoryId)
+                    .Select(c => c.Name)
+                    .FirstOrDefault();
+
+                // Get all products in category
+                var productList = db.Product
+                    .Where(x => x.CategoryId == categoryId)
+                    .Select(x => $"ID: {x.Id} | {x.Name} | {x.Price}:-")
+                    .ToList();
+
+                // Display the products
+                var productWindow = new Window(categoryName, 0, 0, productList);
+                productWindow.Draw();
+
+                int productId = Helpers.GetIntInput("Enter the ID of a product to view details, or press 0 to go back: ");
+
+                if (productId == 0)
+                {
+                    Console.WriteLine("Returning to the previous menu...");
+                    return;
+                }
+
+                // Check if a valid product ID
+                var selectedProduct = db.Product.Where(x => x.CategoryId == categoryId && x.Id == productId)
+                    .Select(x => $"ID: {x.Id} | {x.Name} | {x.Price}:- | {x.Description} | {x.Amount} in storage.").FirstOrDefault();
+
+                // Check if the product exists
+                if (!string.IsNullOrEmpty(selectedProduct))
+                {
+                    // Display the selected product
+                    var selectedProductWindow = new Window("Product Details", 0, productList.Count + 4, new List<string> { selectedProduct });
+                    selectedProductWindow.Draw();
+                }
+                else
+                {
+                    Console.WriteLine("Product not found. Press any key to return.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        public static void Category1()
+        {
+            DisplayCategoryProducts(1);
+        }
+
+        public static void Category2()
+        {
+            DisplayCategoryProducts(2);
+        }
+
+        public static void Category3()
+        {
+            DisplayCategoryProducts(3);
+        }
+
+        public static void Admin()
+        {
+            using (var db = new myDbContext())
+            {
+                Console.Clear();
+
+            }
+        }
     }
 }
