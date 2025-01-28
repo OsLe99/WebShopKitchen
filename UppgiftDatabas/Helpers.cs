@@ -19,7 +19,7 @@ namespace UppgiftDatabas
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid integer.");
+                    Console.WriteLine("Invalid input. Please enter a valid number.");
                 }
                 catch (OverflowException)
                 {

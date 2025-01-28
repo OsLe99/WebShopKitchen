@@ -7,10 +7,16 @@
             bool runProgram = true;
             while (runProgram == true)
             {
-                ShopAlter.ChangeProduct();
-                ShopAlter.ChangeProduct();
+                Console.Clear();
                 Menu.MainMenu();
-                Console.ReadKey();
+                ConsoleKeyInfo input = Console.ReadKey();
+                switch (input.KeyChar)
+                {
+                    case '1':
+                        Console.Write("1");
+                        Console.ReadLine();
+                        break;
+                }
             }
         }
     }

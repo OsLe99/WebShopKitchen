@@ -117,5 +117,53 @@ namespace UppgiftDatabas
                 Console.ReadKey();
             }
         }
+
+        public static void ChangeDeliverer()
+        {
+            using (var db = new myDbContext())
+            {
+                var delivererList = db.Deliverer;
+                foreach (var deliverer in delivererList)
+                {
+                    Console.WriteLine($"ID: {deliverer.Id} Name: {deliverer.Name}");
+                }
+                int alterDelivererId = Helpers.GetIntInput("ID of deliverer to change: ");
+                var alterDeliverer = db.Deliverer.SingleOrDefault(deliverer => deliverer.Id == alterDelivererId);
+                if (alterDeliverer == null)
+                {
+                    Console.WriteLine("Error: Deliverer ID not found.");
+                    return;
+                }
+                Console.Write("New name: ");
+                alterDeliverer.Name = Console.ReadLine();
+                db.SaveChanges();
+                Console.WriteLine("Deliverer updated successfully. Press any button to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        public static void ChangeCategory()
+        {
+            using (var db = new myDbContext())
+            {
+                var categoryList = db.Category;
+                foreach (var category in categoryList)
+                {
+                    Console.WriteLine($"ID: {category.Id} Name: {category.Name}");
+                }
+                int alterCategoryId = Helpers.GetIntInput("ID of category to change: ");
+                var alterCategory = db.Category.SingleOrDefault(category => category.Id == alterCategoryId);
+                if (alterCategory == null)
+                {
+                    Console.WriteLine("Error: Category ID not found.");
+                    return;
+                }
+                Console.Write("New name: ");
+                alterCategory.Name = Console.ReadLine();
+                db.SaveChanges();
+                Console.WriteLine("Category updated successfully. Press any button to continue...");
+                Console.ReadKey();
+            }
+        }
     }
 }
