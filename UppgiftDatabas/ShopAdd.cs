@@ -119,5 +119,13 @@ namespace UppgiftDatabas
                 Console.ReadKey();
             }
         }
+
+        public static void NewCustomer()
+        {
+            using (var db = new myDbContext())
+            {
+
+            }
+        }
     }
 }

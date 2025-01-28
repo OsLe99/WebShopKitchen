@@ -24,6 +24,7 @@
                         Console.ReadLine();
                         break;
                     case 'a':
+                        Menu.AdminMenu();
                         break;
                 }
             }

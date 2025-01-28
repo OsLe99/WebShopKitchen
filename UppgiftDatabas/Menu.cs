@@ -147,12 +147,64 @@ namespace UppgiftDatabas
             DisplayCategoryProducts(3);
         }
 
-        public static void Admin()
+        public static void AdminMenu()
         {
-            using (var db = new myDbContext())
+            bool adminMenuLoop = true;
+            while (adminMenuLoop == true)
             {
                 Console.Clear();
+                Console.WriteLine("\t+++ Admin Menu +++");
+                Console.WriteLine
+                    (
+                    "1. Add product\n" +
+                    "2. Alter product\n" +
+                    "3. Remove product\n" +
+                    "4. Add deliverer\n" +
+                    "5. Alter deliverer\n" +
+                    "6. Remove deliverer\n" +
+                    "7. Add category\n" +
+                    "8. Alter category\n" +
+                    "9. Remove category\n" +
+                    "0. To exit Admin menu"
+                    );
 
+                int choice = Helpers.GetIntInput("Choice: ");
+
+                switch (choice)
+                {
+                    case 1:
+                        ShopAdd.NewProduct();
+                        break;
+                    case 2:
+                        ShopAlter.ChangeProduct();
+                        break;
+                    case 3:
+                        ShopRemove.RemoveProduct();
+                        break;
+                    case 4:
+                        ShopAdd.NewDeliverer();
+                        break;
+                    case 5:
+                        ShopAlter.ChangeDeliverer();
+                        break;
+                    case 6:
+                        ShopRemove.RemoveDeliverer();
+                        break;
+                    case 7:
+                        ShopAdd.NewCategory();
+                        break;
+                    case 8:
+                        ShopAlter.ChangeCategory();
+                        break;
+                    case 9:
+                        ShopRemove.RemoveCategory();
+                        break;
+                    case 0:
+                        adminMenuLoop = false;
+                        Console.WriteLine("Exiting Admin Menu...");
+                        Console.ReadKey();
+                        break;
+                }
             }
         }
     }
