@@ -2,8 +2,11 @@
 {
     internal class Program
     {
+        static int LoggedInCustomerId;
         static void Main(string[] args)
         {
+            LoggedInCustomerId = Menu.SwitchCustomer();
+
             bool runProgram = true;
             while (runProgram == true)
             {
