@@ -29,6 +29,12 @@
                     case 'a':
                         Menu.AdminMenu();
                         break;
+                    case 't':
+                        Menu.SwitchCustomer();
+                        break;
+                    case 'y':
+                        ShopAdd.NewCustomer();
+                        break;
                 }
             }
         }
