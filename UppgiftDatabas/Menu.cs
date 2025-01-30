@@ -199,6 +199,9 @@ namespace UppgiftDatabas
                     case 9:
                         ShopRemove.RemoveCategory();
                         break;
+                    case 10:
+                        ShopAlter.ChangeCustomer();
+                        break;
                     case 0:
                         adminMenuLoop = false;
                         Console.WriteLine("Exiting Admin Menu...");

@@ -124,7 +124,52 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                Console.WriteLine("\t+++ New Customer +++");
+                Console.Write("Name: ");
+                string customerName = Console.ReadLine();
+                Console.Write("Zip Code: ");
+                string zipCode = Console.ReadLine();
+                Console.Write("Street: ");
+                string street = Console.ReadLine();
+                Console.Write("City: ");
+                string city = Console.ReadLine();
+                Console.Write("Country: ");
+                string country = Console.ReadLine();
+                int phone = Helpers.GetIntInput("Phone Number: ");
+                Console.Write("Email: ");
+                string email = Console.ReadLine();
+                int age = Helpers.GetIntInput("Age: ");
+                bool isAdmin = Helpers.GetYesNoInput("Is the customer an admin? (y/n): ");
 
+                Console.Clear();
+                Console.WriteLine($"Name: {customerName}\nZip Code: {zipCode}\nStreet: {street}\nCity: {city}\n" +
+                    $"Country: {country}\nPhone: {phone}\nEmail: {email}\nAge: {age}\nAdmin: {isAdmin}");
+
+                if (Helpers.GetYesNoInput("Save customer? (y/n): "))
+                {
+                    Console.WriteLine("\tSaving customer...");
+                    var customer = new Customer
+                    {
+                        Name = customerName,
+                        ZipCode = zipCode,
+                        Street = street,
+                        City = city,
+                        Country = country,
+                        Phone = phone,
+                        Email = email,
+                        Age = age,
+                        IsAdmin = isAdmin
+                    };
+                    db.Customer.Add(customer);
+                    db.SaveChanges();
+                    Console.WriteLine("Customer added successfully. Press any key to continue...");
+                }
+                else
+                {
+                    Console.WriteLine("Customer was not saved. Press any key to return to the menu...");
+                }
+                Console.ReadKey();
+                Console.Clear();
             }
         }
     }

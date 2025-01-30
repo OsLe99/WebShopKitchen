@@ -170,5 +170,72 @@ namespace UppgiftDatabas
                 Console.ReadKey();
             }
         }
+        public static void ChangeCustomer()
+        {
+            using (var db = new myDbContext())
+            {
+                Console.Clear();
+                var customerList = db.Customer;
+                foreach (var customer in customerList)
+                {
+                    Console.WriteLine($"ID: {customer.Id}\t Name: {customer.Name}\t Email: {customer.Email}\t Phone: {customer.Phone}");
+                }
+
+                int alterId = Helpers.GetIntInput("ID of customer to change: ");
+                var alterCustomer = db.Customer.SingleOrDefault(customer => customer.Id == alterId);
+
+                if (alterCustomer == null)
+                {
+                    Console.WriteLine("Error: Customer ID not found.");
+                    return;
+                }
+
+                Console.Clear();
+                Console.WriteLine($"1: Name: {alterCustomer.Name}\n2: Email: {alterCustomer.Email}\n3: Phone: {alterCustomer.Phone}\n4: Address: {alterCustomer.Street}, {alterCustomer.City}, {alterCustomer.ZipCode}, {alterCustomer.Country}\n5: Age: {alterCustomer.Age}\n6: Admin: {alterCustomer.IsAdmin}");
+                Console.WriteLine("Press 0 to exit.");
+
+                int adminChoice = Helpers.GetIntInput("Select what to change: ");
+
+                switch (adminChoice)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        Console.Write("New name: ");
+                        alterCustomer.Name = Console.ReadLine();
+                        break;
+                    case 2:
+                        Console.Write("New email: ");
+                        alterCustomer.Email = Console.ReadLine();
+                        break;
+                    case 3:
+                        alterCustomer.Phone = Helpers.GetIntInput("New phone number: ");
+                        break;
+                    case 4:
+                        Console.Write("New street: ");
+                        alterCustomer.Street = Console.ReadLine();
+                        Console.Write("New city: ");
+                        alterCustomer.City = Console.ReadLine();
+                        Console.Write("New zip code: ");
+                        alterCustomer.ZipCode = Console.ReadLine();
+                        Console.Write("New country: ");
+                        alterCustomer.Country = Console.ReadLine();
+                        break;
+                    case 5:
+                        alterCustomer.Age = Helpers.GetIntInput("New age: ");
+                        break;
+                    case 6:
+                        alterCustomer.IsAdmin = Helpers.GetYesNoInput("Is the customer an admin? (y/n): ");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        break;
+                }
+
+                db.SaveChanges();
+                Console.WriteLine("Customer updated successfully. Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
     }
 }
