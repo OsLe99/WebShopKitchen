@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UppgiftDatabas.Models;
 
@@ -10,9 +11,11 @@ using UppgiftDatabas.Models;
 namespace UppgiftDatabas.Migrations
 {
     [DbContext(typeof(myDbContext))]
-    partial class myDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250130161920_AzureTest")]
+    partial class AzureTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,11 +44,14 @@ namespace UppgiftDatabas.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
-
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("CartProduct");
                 });
@@ -228,15 +234,15 @@ namespace UppgiftDatabas.Migrations
 
             modelBuilder.Entity("UppgiftDatabas.Models.CartProduct", b =>
                 {
-                    b.HasOne("UppgiftDatabas.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("CartProduct")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("UppgiftDatabas.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UppgiftDatabas.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("CartProduct")
+                        .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

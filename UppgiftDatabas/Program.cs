@@ -15,25 +15,33 @@
                 switch (input.KeyChar)
                 {
                     case '1':
-                        Menu.Category1();
-                        Console.ReadLine();
+                        Menu.Category1(LoggedInCustomerId);
+                        Console.ReadKey();
                         break;
                     case '2':
-                        Menu.Category2();
-                        Console.ReadLine();
+                        Menu.Category2(LoggedInCustomerId);
+                        Console.ReadKey();
                         break;
                     case '3':
-                        Menu.Category3();
-                        Console.ReadLine();
+                        Menu.Category3(LoggedInCustomerId);
+                        Console.ReadKey();
                         break;
-                    case 'a':
+                    case 'a': // Admin
                         Menu.AdminMenu();
                         break;
-                    case 't':
+                    case 's': // Search
+                        break;
+                    case 'c':
+                        ShopCart.ViewCart(LoggedInCustomerId);
+                        break;
+                    case 't': // Switch customer
                         Menu.SwitchCustomer();
                         break;
-                    case 'y':
+                    case 'y': // New customer
                         ShopAdd.NewCustomer();
+                        break;
+                    case 'q':
+                        Environment.Exit(0);
                         break;
                 }
             }

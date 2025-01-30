@@ -40,7 +40,7 @@ namespace UppgiftDatabas
                 foreach (var categoryId in categories)
                 {
                     var chosenList = db.Product.Where(x => x.Chosen == true && x.CategoryId == categoryId)
-                        .Select(x => $"{x.Name} | {x.Price} | {x.Description}").ToList();
+                        .Select(x => $"{x.Name} | {x.Price}:- | {x.Description}").ToList();
 
                     if (!chosenList.Any())
                     {
@@ -85,7 +85,7 @@ namespace UppgiftDatabas
             }
         }
 
-        public static void DisplayCategoryProducts(int categoryId)
+        public static void DisplayCategoryProducts(int categoryId, int LoggedInCustomerId)
         {
             using (var db = new myDbContext())
             {
@@ -95,14 +95,14 @@ namespace UppgiftDatabas
                     .Select(c => c.Name)
                     .FirstOrDefault();
 
-                // Get all products in category
+                // Get all products in the category
                 var productList = db.Product
                     .Where(x => x.CategoryId == categoryId)
-                    .Select(x => $"ID: {x.Id} | {x.Name} | {x.Price}:-")
+                    .Select(x => new { x.Id, x.Name, x.Price })
                     .ToList();
 
                 // Display the products
-                var productWindow = new Window(categoryName, 0, 0, productList);
+                var productWindow = new Window(categoryName, 0, 0, productList.Select(p => $"ID: {p.Id} | {p.Name} | {p.Price}:-").ToList());
                 productWindow.Draw();
 
                 int productId = Helpers.GetIntInput("Enter the ID of a product to view details, or press 0 to go back: ");
@@ -114,15 +114,30 @@ namespace UppgiftDatabas
                 }
 
                 // Check if a valid product ID
-                var selectedProduct = db.Product.Where(x => x.CategoryId == categoryId && x.Id == productId)
-                    .Select(x => $"ID: {x.Id} | {x.Name} | {x.Price}:- | {x.Description} | {x.Amount} in storage.").FirstOrDefault();
+                var selectedProduct = db.Product
+                    .Where(x => x.CategoryId == categoryId && x.Id == productId)
+                    .Select(x => new { x.Id, x.Name, x.Price, x.Description, x.Amount })
+                    .FirstOrDefault();
 
                 // Check if the product exists
-                if (!string.IsNullOrEmpty(selectedProduct))
+                if (selectedProduct != null)
                 {
-                    // Display the selected product
-                    var selectedProductWindow = new Window("Product Details", 0, productList.Count + 4, new List<string> { selectedProduct });
+                    // Display the selected product details
+                    var selectedProductWindow = new Window("Product Details", 0, productList.Count + 4, new List<string>
+            {
+                $"ID: {selectedProduct.Id} | {selectedProduct.Name} | {selectedProduct.Price}:- | {selectedProduct.Description} | {selectedProduct.Amount} in storage."
+            });
                     selectedProductWindow.Draw();
+
+                    // Ask if they want to add the product to their cart
+                    Console.WriteLine("Would you like to add this product to your cart? (y/n)");
+                    var addToCartChoice = Console.ReadLine()?.ToLower();
+
+                    if (addToCartChoice == "y")
+                    {
+                        // Only call AddToCart once here
+                        ShopCart.AddToCart(LoggedInCustomerId, productId);
+                    }
                 }
                 else
                 {
@@ -132,20 +147,22 @@ namespace UppgiftDatabas
             }
         }
 
-        public static void Category1()
+        public static void Category1(int LoggedInCustomerId)
         {
-            DisplayCategoryProducts(1);
+            DisplayCategoryProducts(1, LoggedInCustomerId);
         }
 
-        public static void Category2()
+
+        public static void Category2(int LoggedInCustomerId)
         {
-            DisplayCategoryProducts(2);
+            DisplayCategoryProducts(2, LoggedInCustomerId);  
         }
 
-        public static void Category3()
+        public static void Category3(int LoggedInCustomerId)
         {
-            DisplayCategoryProducts(3);
+            DisplayCategoryProducts(3, LoggedInCustomerId);
         }
+
 
         public static void AdminMenu()
         {
