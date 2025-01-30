@@ -53,6 +53,7 @@ namespace UppgiftDatabas
             }
         }
 
+        // Fetch all products sorted by TotalSold
         public static async Task GetTopSellingProductAsync()
         {
             using (var connection = new SqlConnection(connectionString))
@@ -105,12 +106,60 @@ namespace UppgiftDatabas
                 Console.ReadKey();
             }
         }
+        // Fetch all products from a customer where Paid = 1
+        public static async Task ViewPastPurchasesAsync(int customerId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                sw.Start();
+                await connection.OpenAsync();
+
+                // Adjust query to join CartProduct with ShoppingCart based on CartId and filter by CustomerId
+                var query = @"
+                    SELECT p.Name, cp.Quantity, p.Price, cp.Quantity * p.Price AS TotalPrice
+                    FROM CartProduct cp
+                    INNER JOIN Product p ON cp.ProductId = p.Id
+                    INNER JOIN ShoppingCart sc ON cp.CartId = sc.Id
+                    WHERE sc.CustomerId = @CustomerId AND cp.Paid = 1";
+
+                var purchases = await connection.QueryAsync(query, new { CustomerId = customerId });
+                sw.Stop();
+                if (purchases.Any())
+                {
+                    Console.WriteLine("\nYour Past Purchases:");
+                    foreach (var purchase in purchases)
+                    {
+                        Console.WriteLine($"Product: {purchase.Name} | Quantity: {purchase.Quantity} | Price per unit: {purchase.Price}:- | Total: {purchase.TotalPrice}:-");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You have not made any purchases yet.");
+                }
+                Console.WriteLine($"Search took: {sw.ElapsedMilliseconds}ms");
+                Console.ReadKey();
+            }
+        }
+
+        public static async Task<bool> IsUserAdminAsync(int customerId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT IsAdmin FROM Customer WHERE Id = @CustomerId";
+                var isAdmin = await connection.QuerySingleOrDefaultAsync<bool>(query, new { CustomerId = customerId });
+
+                return isAdmin;
+            }
+        }
 
         public static void MainMenu()
         {
             using (var db = new myDbContext())
             {
-                // Welcome windows
+                // Welcome window
                 Console.Clear();
                 List<string> welcomeText = new List<string>
                 {
@@ -120,7 +169,7 @@ namespace UppgiftDatabas
 
 
                
-                // Display category window
+                // Display category windows
                 var categoryList = db.Category.Select(x => $"ID: {x.Id} | {x.Name}").ToList();
                 var categoryWindow = new Window("Category", 0, (welcomeText.Count + 2), categoryList);
 
@@ -163,6 +212,7 @@ namespace UppgiftDatabas
                     "'A' for admin",
                     "'S' for search",
                     "'C' for checkout",
+                    "'H' for past order history",
                     "'T' to change customer",
                     "'Y' to add customer",
                     "'Q to quit"
@@ -340,7 +390,8 @@ namespace UppgiftDatabas
             using (var db = new myDbContext())
             {
                 Console.Clear();
-                var customerList = db.Customer;
+                var customerList = db.Customer.ToList();
+
                 foreach (var customer in customerList)
                 {
                     Console.WriteLine($"ID: {customer.Id}\t Name: {customer.Name}\t Email: {customer.Email}");
@@ -355,7 +406,10 @@ namespace UppgiftDatabas
                     return -1;
                 }
 
-                Console.WriteLine($"Switched to Customer: {switchCustomer.Name}\n Press any key to continue...");
+                Program.LoggedInCustomerId = switchCustomer.Id;
+                Program.IsAdmin = switchCustomer.IsAdmin;
+
+                Console.WriteLine($"Switched to Customer: {switchCustomer.Name} (Admin: {switchCustomer.IsAdmin})\nPress any key to continue...");
                 Console.ReadKey();
                 return switchCustomer.Id;
             }

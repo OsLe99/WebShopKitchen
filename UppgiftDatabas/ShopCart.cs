@@ -58,7 +58,7 @@ namespace UppgiftDatabas
                 }
 
                 Console.WriteLine($"Total Sum: {totalSum}:-");
-                Console.WriteLine("\nOptions:");
+                Console.WriteLine("Options:");
                 Console.WriteLine("1. Remove an item");
                 Console.WriteLine("2. Checkout");
                 Console.WriteLine("0. Go back");
@@ -157,8 +157,6 @@ namespace UppgiftDatabas
                 db.SaveChanges();
             }
         }
-
-
 
         private static void RemoveItem(int customerId)
         {
@@ -327,8 +325,5 @@ namespace UppgiftDatabas
                 Console.ReadKey();
             }
         }
-
-
-
     }
 }
