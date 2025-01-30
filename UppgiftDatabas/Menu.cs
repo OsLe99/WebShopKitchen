@@ -210,5 +210,31 @@ namespace UppgiftDatabas
                 }
             }
         }
+
+        public static int SwitchCustomer()
+        {
+            using (var db = new myDbContext())
+            {
+                Console.Clear();
+                var customerList = db.Customer;
+                foreach (var customer in customerList)
+                {
+                    Console.WriteLine($"ID: {customer.Id}\t Name: {customer.Name}\t Email: {customer.Email}");
+                }
+
+                int switchId = Helpers.GetIntInput("Enter the ID of the customer: ");
+                var switchCustomer = db.Customer.SingleOrDefault(customer => customer.Id == switchId);
+
+                if (switchCustomer == null)
+                {
+                    Console.WriteLine("Error: Customer ID not found.");
+                    return -1;
+                }
+
+                Console.WriteLine($"Switched to Customer: {switchCustomer.Name}\n Press any key to continue...");
+                Console.ReadKey();
+                return switchCustomer.Id;
+            }
+        }
     }
 }
