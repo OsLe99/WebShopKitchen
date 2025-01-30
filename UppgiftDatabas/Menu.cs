@@ -53,6 +53,59 @@ namespace UppgiftDatabas
             }
         }
 
+        public static async Task GetTopSellingProductAsync()
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Query to get the most sold product from CartProduct where Paid = 1
+                var query = @"
+                    SELECT TOP 1 p.Id, p.Name, SUM(cp.Quantity) AS TotalSold
+                    FROM Product p
+                    INNER JOIN CartProduct cp ON p.Id = cp.ProductId
+                    WHERE cp.Paid = 1
+                    GROUP BY p.Id, p.Name
+                    ORDER BY TotalSold DESC";
+
+                var topSellingProduct = await connection.QuerySingleOrDefaultAsync<dynamic>(query);
+                Console.WriteLine("\n");
+                if (topSellingProduct != null)
+                {
+                    Console.WriteLine($"Most Sold Product: {topSellingProduct.Name} | Total Sold: {topSellingProduct.TotalSold}");
+                }
+                else
+                {
+                    Console.WriteLine("Something went wrong.");
+                }
+                Console.ReadKey();
+            }
+        }
+
+        // Fetch all products sorted by the lowest amount
+        public static async Task GetProductsSortedByStockAsync()
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Query to get all products sorted by amount
+                var query = @"
+                    SELECT Id, Name, Amount
+                    FROM Product
+                    ORDER BY Amount ASC";
+
+                var products = await connection.QueryAsync<Product>(query);
+                Console.WriteLine("\n");
+                Console.WriteLine("\nProducts Sorted by Lowest Stock (Amount):");
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"ID: {product.Id} | Name: {product.Name} | Amount in Stock: {product.Amount}");
+                }
+                Console.ReadKey();
+            }
+        }
+
         public static void MainMenu()
         {
             using (var db = new myDbContext())
@@ -170,6 +223,7 @@ namespace UppgiftDatabas
                     selectedProductWindow.Draw();
 
                     // Ask if they want to add the product to their cart
+                    Console.WriteLine("");
                     Console.WriteLine("Would you like to add this product to your cart? (y/n)");
                     var addToCartChoice = Console.ReadLine()?.ToLower();
 
@@ -224,6 +278,8 @@ namespace UppgiftDatabas
                     "9. Remove category\n" +
                     "10. Add customer\n" +
                     "11. Alter customer\n" +
+                    "12. See most sold product\n" +
+                    "13. See products sorted by lowest amount left\n" +
                     "0. To exit Admin menu"
                     );
 
@@ -263,6 +319,12 @@ namespace UppgiftDatabas
                         break;
                     case 11:
                         ShopAlter.ChangeCustomer();
+                        break;
+                    case 12:
+                        GetTopSellingProductAsync();
+                        break;
+                    case 13:
+                        GetProductsSortedByStockAsync();
                         break;
                     case 0:
                         adminMenuLoop = false;

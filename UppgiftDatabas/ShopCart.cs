@@ -102,7 +102,7 @@ namespace UppgiftDatabas
                     db.SaveChanges();
                 }
 
-                // Ensure that the cart exists and CartProduct collection´exists
+                // Ensure that the cart exists and CartProduct collection exists
                 if (cart.CartProduct == null)
                 {
                     cart.CartProduct = new List<CartProduct>();
@@ -122,7 +122,7 @@ namespace UppgiftDatabas
                     Console.WriteLine("Product is out of stock.");
                     return;
                 }
-
+                Console.WriteLine("");
                 int quantity = Helpers.GetIntInput($"Enter quantity for {product.Name} (Max {product.Amount}): ");
                 if (quantity <= 0 || quantity > product.Amount)
                 {
@@ -130,7 +130,7 @@ namespace UppgiftDatabas
                     return;
                 }
 
-                // Check if the product already exists in the cart, if yes, update the quantity
+                // Check if the product already exists in the cart, update the quantity if true
                 var existingCartProduct = cart.CartProduct.SingleOrDefault(cp => cp.ProductId == productId && !cp.Paid);
                 if (existingCartProduct != null)
                 {
