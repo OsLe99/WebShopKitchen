@@ -7,17 +7,57 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using UppgiftDatabas.Models;
+using System.Data.SqlClient;
 
 namespace UppgiftDatabas
 {
     internal class Menu
     {
+        private static string connectionString = "Server=tcp:kitchenstoreoscar.database.windows.net,1433;Initial Catalog=KitchenStore;Persist Security Info=False;User ID=sqladmin;Password=Oscar1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+        public static async Task SearchProductAsync()
+        {
+            Stopwatch sw = new Stopwatch();
+            Console.WriteLine("Enter product name to search:");
+            string searchQuery = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                Console.WriteLine("Search query cannot be empty.");
+                return;
+            }
+            sw.Start();
+            using (var connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Search query using Dapper 
+                var products = await connection.QueryAsync<Product>("SELECT * FROM dbo.Product WHERE Name LIKE @Name", new { Name = "%" + searchQuery + "%" });
+                sw.Stop();
+                if (products.Any())
+                {
+                    Console.WriteLine("Search Results:");
+                    foreach (var product in products)
+                    {
+                        Console.WriteLine($"ID: {product.Id} | Name: {product.Name} | Price: {product.Price}:- | Category ID: {product.CategoryId}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No products found with that name.");
+                }
+                Console.WriteLine($"Search took: {sw.ElapsedMilliseconds}ms");
+                Console.ReadKey();
+            }
+        }
+
         public static void MainMenu()
         {
             using (var db = new myDbContext())
             {
-                // Welcome window
+                // Welcome windows
                 Console.Clear();
                 List<string> welcomeText = new List<string>
                 {

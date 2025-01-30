@@ -3,7 +3,7 @@
     internal class Program
     {
         static int LoggedInCustomerId;
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             LoggedInCustomerId = Menu.SwitchCustomer();
 
@@ -30,6 +30,7 @@
                         Menu.AdminMenu();
                         break;
                     case 's': // Search
+                        await Menu.SearchProductAsync();
                         break;
                     case 'c':
                         ShopCart.ViewCart(LoggedInCustomerId);
