@@ -165,6 +165,8 @@ namespace UppgiftDatabas
                     "7. Add category\n" +
                     "8. Alter category\n" +
                     "9. Remove category\n" +
+                    "10. Add customer\n" +
+                    "11. Alter customer\n" +
                     "0. To exit Admin menu"
                     );
 
@@ -200,6 +202,9 @@ namespace UppgiftDatabas
                         ShopRemove.RemoveCategory();
                         break;
                     case 10:
+                        ShopAdd.NewCustomer();
+                        break;
+                    case 11:
                         ShopAlter.ChangeCustomer();
                         break;
                     case 0:
