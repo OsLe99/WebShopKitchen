@@ -19,7 +19,7 @@ namespace UppgiftDatabas.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=tcp:kitchenstoreoscar.database.windows.net,1433;Initial Catalog=KitchenStore;Persist Security Info=False;User ID=sqladmin;Password=Oscar1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            optionsBuilder.UseSqlServer(@"Server=tcp:kitchenstoreoscar.database.windows.net,1433;Initial Catalog=KitchenStore;Persist Security Info=False;User ID=sqladmin;Password={Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
     }
 }

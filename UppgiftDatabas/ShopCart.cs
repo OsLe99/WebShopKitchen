@@ -14,6 +14,7 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                // Dev stuff, only used if somehow able to bypass customer selection
                 if (customerId == -1)
                 {
                     Console.WriteLine("No customer logged in. Please log in first.");
@@ -86,6 +87,7 @@ namespace UppgiftDatabas
         {
             using (var db = new myDbContext())
             {
+                // Dev stuff, only used if somehow able to bypass customer selection
                 if (loggedInCustomerId == -1)
                 {
                     Console.WriteLine("No customer logged in. Please switch customers first.");
@@ -277,7 +279,7 @@ namespace UppgiftDatabas
                 totalSum += deliveryCost;
                 Console.WriteLine($"Total cost including delivery: {totalSum}:-");
 
-                // Make sure the cart contains unpaid items before proceeding
+                // Make sure the cart contains unpaid items before proceeding to checkout
                 var unpaidItems = cart.CartProduct.Where(cp => !cp.Paid).ToList();
                 if (!unpaidItems.Any())
                 {
@@ -312,7 +314,7 @@ namespace UppgiftDatabas
                 db.SaveChanges();
                 Console.WriteLine("Checkout complete! Thank you for your purchase!");
                 Console.WriteLine($"Payment Method: {paymentMethod}");
-                Console.WriteLine("\nYour final cart details:");
+                Console.WriteLine("Your final cart details:");
                 foreach (var cartProduct in unpaidItems)
                 {
                     var product = db.Product.SingleOrDefault(p => p.Id == cartProduct.ProductId);

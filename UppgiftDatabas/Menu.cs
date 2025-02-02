@@ -15,7 +15,7 @@ namespace UppgiftDatabas
 {
     internal class Menu
     {
-        private static string connectionString = "Server=tcp:kitchenstoreoscar.database.windows.net,1433;Initial Catalog=KitchenStore;Persist Security Info=False;User ID=sqladmin;Password=Oscar1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private static string connectionString = "Server=tcp:kitchenstoreoscar.database.windows.net,1433;Initial Catalog=KitchenStore;Persist Security Info=False;User ID=sqladmin;Password={Password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public static async Task SearchProductAsync()
         {
